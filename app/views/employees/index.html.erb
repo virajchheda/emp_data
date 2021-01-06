@@ -1,0 +1,53 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Employees</h1>
+<%= form_tag("/", :method => "get") do %>
+   <%= label_tag(:q, "Search:") %>
+   <%= text_field_tag(:q) %>
+   <%= submit_tag("Search") %>
+<% end %>
+<br>
+<%if @employees.present?%>
+  <%= will_paginate @employees %>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Address</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Dob</th>
+        <th>Image</th>
+        <th colspan="3"></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @employees.each do |employee| %>
+        <tr>
+          <td><%= employee.name %></td>
+          <td><%= employee.address %></td>
+          <td><%= employee.email %></td>
+          <td><%= employee.phone %></td>
+          <td><%= employee.dob %></td>
+          <td>
+            <% if employee.emp_image.attached? %>
+              <image src="<%= (url_for(employee.emp_image))%>" width="60" height="60">  
+            <%else%>
+              N/A
+            <% end%>  
+          </td>
+
+          <td><%= link_to 'Show', employee %></td>
+          <td><%= link_to 'Edit', edit_employee_path(employee) %></td>
+          <td><%= link_to 'Destroy', employee, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<%else%>
+  <h3>NO DATA FOUND</h3>
+<%end%>
+<br>
+
+<%= link_to 'New Employee', new_employee_path %>
